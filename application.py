@@ -19,7 +19,7 @@ mydb=database_flaskr()
 @application.route('/hello', methods=['GET'])
 def hello():
 	if request.method == 'GET':
-		return 'Hello beta Boom Boom!'
+		return 'Hello World!!!'
 		
 @application.route('/yellow', methods=['GET'])
 def yellow():
@@ -37,7 +37,7 @@ def yatradata():
 	if(mydb.yatraDataExists(f['sender_number'],f['receiver_number'])):
 		return "Done!"
 	else:
-		mydb.insertYatraData(f['sender_number'],f['receiver_number'],f['datetime'])
+		mydb.insertYatraData(f['sender_number'],f['receiver_number'],f['sender_name'],f['receiver_name'],f['datetime'])
 		if(mydb.yatraDataExists(f['sender_number'],f['receiver_number'])):
 			return "Done!"
 		else:

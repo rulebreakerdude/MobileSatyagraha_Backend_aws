@@ -67,12 +67,12 @@ class database_flaskr:
 	#yatra definitions	
 	def yatraDataExists(self,sender_number,receiver_number):
 		pingAndReconnect(self)
-		db_response=self.c.execute("SELECT * FROM yatra_data_1 WHERE sender_number = %s AND receiver_number = %s;",(sender_number,receiver_number) )
+		db_response=self.c.execute("SELECT * FROM yatra_data_2 WHERE sender_number = %s AND receiver_number = %s;",(sender_number,receiver_number) )
 		return db_response>0
 		
-	def insertYatraData(self,sender_number,receiver_number,datetime):
+	def insertYatraData(self,sender_number,receiver_number,sender_name,receiver_name,datetime):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO yatra_data_1 (sender_number,receiver_number,datetime) VALUES (%s,%s,%s);",(sender_number,receiver_number,datetime) )
+		self.c.execute("INSERT INTO yatra_data_2 (sender_number,receiver_number,sender_name,receiver_name,datetime) VALUES (%s,%s,%s,%s,%s);",(sender_number,receiver_number,sender_name,receiver_name,datetime) )
 		self.conn.commit()
 #****************************************************************************	
 
