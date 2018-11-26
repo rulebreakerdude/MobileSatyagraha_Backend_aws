@@ -293,7 +293,7 @@ class database_flaskr:
 		db_response=self.c.execute("SELECT * FROM app_users_per_problem2 WHERE problem_id = %s;",(problem_id,))
 		db_response=self.c.fetchall()
 		if(len(db_response)==0):
-			self.c.execute("INSERT INTO app_users_per_problem2 (problem_id, user1, user2) VALUES (%s,%s,%s);",(problem_id,"",""))
+			self.c.execute("INSERT INTO app_users_per_problem2 (problem_id, user1, user2) VALUES (%s,%s,%s);",(problem_id,username,''))
 			self.conn.commit()
 			response="Adopted"
 		elif db_response[0][1] is '':
@@ -315,7 +315,7 @@ class database_flaskr:
 		db_response=self.c.execute("SELECT * FROM app_problems_per_user WHERE username = %s;",(username,))
 		db_response=self.c.fetchall()
 		if(len(db_response)==0):
-			self.c.execute("INSERT INTO app_problems_per_user (username, problem1, problem2) VALUES (%s,%s,%s);",(username,problem_id,""))
+			self.c.execute("INSERT INTO app_problems_per_user (username, problem1, problem2) VALUES (%s,%s,%s);",(username,problem_id,''))
 			self.conn.commit()
 		elif db_response[0][1] is '': 
 			self.c.execute("UPDATE app_problems_per_user SET problem1 = %s WHERE (username = %s);",(problem_id,username))
