@@ -237,11 +237,6 @@ class database_flaskr:
 
 		return json.dumps(db_parse)
 		
-	def insertUser(self,username,password_hash,name,email):
-		pingAndReconnect(self)
-		self.c.execute("INSERT INTO app_credentials (username, password_hash, name, email) VALUES (%s,%s,%s,%s);",(username,password_hash,name,email))
-		self.conn.commit()
-		
 	def registerComment(self,username,problem_id,comment):
 		pingAndReconnect(self)
 		self.c.execute("INSERT INTO app_comments (username, problem_id, comments) VALUES (%s,%s,%s);",(username,problem_id,comment.encode("utf-8")))
