@@ -302,14 +302,14 @@ class database_flaskr:
 			self.c.execute("INSERT INTO app_users_per_problem2 (problem_id, user1, user2) VALUES (%s,%s,%s);",(problem_id,username,''))
 			self.conn.commit()
 			response="Adopted"
-		elif db_response[0][1] is '':
+		elif db_response[0][1] is '' and  db_response[0][2] is '':
 			self.c.execute("UPDATE app_users_per_problem2 SET user1 = %s WHERE (problem_id = %s);",(username,problem_id))
 			self.conn.commit()
 			response= "Adopted"
-		elif db_response[0][2] is '':
-			self.c.execute("UPDATE app_users_per_problem2 SET user2 = %s WHERE (problem_id = %s);",(username,problem_id))
-			self.conn.commit()
-			response= "Adopted"
+		#elif db_response[0][2] is '':
+		#	self.c.execute("UPDATE app_users_per_problem2 SET user2 = %s WHERE (problem_id = %s);",(username,problem_id))
+		#	self.conn.commit()
+		#	response= "Adopted"
 		else:
 			response= "Users Full"
 		if response != "Users Full":
