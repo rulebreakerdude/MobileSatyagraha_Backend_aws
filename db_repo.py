@@ -247,6 +247,7 @@ class database_flaskr:
 	def fetchComments(self,problem_id):
 		pingAndReconnect(self)
 		db_response=self.c.execute("SELECT * FROM app_comments WHERE problem_id = %s ORDER BY datetime DESC;",(problem_id,))
+		db_response=self.c.fetchall()
 		db_parse=[{"username": str(x[0]),
 					"problem_id": str(x[1]), 
 					"comments": str(x[2]),
