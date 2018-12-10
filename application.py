@@ -148,7 +148,7 @@ def getSession():
 def userCount(problem_id):
 	return str(mydb.userCount(problem_id))	
 
-@application.route('/canAdoptProblem/<username>')
+@application.route('/canAdoptProblem/<username>', methods=['POST', 'GET'])
 def canAdoptProblem(username):
 	if(mydb.canAdoptProblem(username)=="Yes"):
 		return "Yes"
@@ -163,7 +163,7 @@ def adoptProblem(username,problem_id):
 def unAdoptProblem(username,problem_id):
 	return mydb.unAdoptProblem(username,problem_id)
 
-@application.route('/problemAgainstUser/<username>')
+@application.route('/problemAgainstUser/<username>', methods=['POST', 'GET'])
 def problemAgainstUser(username):
 	return str(mydb.fetchProblemAgainstUser(username))
 	
