@@ -251,7 +251,7 @@ class database_flaskr:
 					"problem_id": str(x[1]), 
 					"comments": str(x[2]),
 					"datetime": str(x[3])} for x in db_response]
-		return "Done"
+		return json.dumps(db_parse)
 		
 	def userExists(self,username):
 		pingAndReconnect(self)
