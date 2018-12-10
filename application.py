@@ -170,6 +170,10 @@ def problemAgainstUser(username):
 @application.route('/registerComment', methods=['POST'])
 def registerComment():
 	return mydb.registerComment(request.form['username'],request.form['problem_id'],request.form['comment'])
+	
+@application.route('/fetchComments/<problem_id>', methods=['POST'])
+def fetchComments():
+	return str(mydb.fetchComments(problem_id))
 #****************************************************************************
 
 
