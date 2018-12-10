@@ -239,8 +239,18 @@ class database_flaskr:
 		
 	def registerComment(self,username,problem_id,comment):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO app_comments (username, problem_id, comments) VALUES (%s,%s,%s);",(username,problem_id,comment.encode("utf-8")))
+		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+		self.c.execute("INSERT INTO app_comments (username, problem_id, comments, datetime) VALUES (%s,%s,%s,%s);",(username,problem_id,comment.encode("utf-8"),z))
 		self.conn.commit()
+		return "Done"
+		
+	def fetchComments(self,problem_id):
+		pingAndReconnect(self)
+		self.c.execute("SELECT * FROM app_comments WHERE problem_id = %s ORDER BY datetime DESC;",(problem_id,))
+		db_parse=[{"username": str(x[0]),
+					"problem_id": str(x[1]), 
+					"comments": str(x[2]),
+					"datetime": str(x[3])} for x in db_response]
 		return "Done"
 		
 	def userExists(self,username):
