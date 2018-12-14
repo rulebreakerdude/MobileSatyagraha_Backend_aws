@@ -274,10 +274,10 @@ class database_flaskr:
 		db_response=self.c.fetchall()
 		if(len(db_response)==0):
 			return "Yes"
-		elif db_response[0][1] is '' and db_response[0][2] is '': 
+		elif db_response[0][1] is '': 
 			return "Yes"
-		#elif db_response[0][2] is '':
-		#	return "Yes"
+		elif db_response[0][2] is '':
+			return "Yes"
 		else:
 			return "No"
 	
