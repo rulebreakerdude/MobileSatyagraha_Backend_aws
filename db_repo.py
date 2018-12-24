@@ -2,6 +2,8 @@ import MySQLdb
 import json
 import datetime
 
+su="1234567891" #Superuser
+
 
 def pingAndReconnect(self):
 	try:
@@ -141,7 +143,7 @@ class database_flaskr:
 		education="%EDUCATION%"
 		food="%FOOD%"
 		forest="%FOREST%"
-		land="%LAND=%"
+		land="%LAND%"
 		electricity="%ELECTRICITY%"
 		water="%WATER%"
 		handpump="%HANDPUMP%"
@@ -196,6 +198,21 @@ class database_flaskr:
 		
 	def fetchProblemAgainstUser(self,username):
 		pingAndReconnect(self)
+		if str(username) == su: #Superuser
+			db_response_2=self.c.execute(
+				"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE id in (SELECT problem_id FROM ms_su_problems);")
+			db_response_2=self.c.fetchall()
+			db_parse=[{"problem_id": str(x[0]),
+						"problem_text": x[1].decode("utf-8"), 
+						"phone_number_r": x[2],
+						"phone_number_o": x[3],
+						"status": str(x[4]),
+						"comments": x[5],
+						"datetime": str(x[6].strftime("%d %B")),
+						"problem_desc": x[7].decode("utf-8"),
+						"duration": str(x[8])} for x in db_response_2]
+			return json.dumps(db_parse)
+			
 		db_response_1=self.c.execute(
 			"SELECT * FROM app_problems_per_user WHERE username = %s;",(username,))
 		db_response_1=self.c.fetchall()
@@ -272,7 +289,7 @@ class database_flaskr:
 		pingAndReconnect(self)
 		db_response=self.c.execute("SELECT * FROM app_problems_per_user WHERE username = %s;",(username,))
 		db_response=self.c.fetchall()
-		if(len(db_response)==0):
+		if(len(db_response)==0 or str(username) == su):#Superuser
 			return "Yes"
 		elif db_response[0][1] is '': 
 			return "Yes"
@@ -296,6 +313,12 @@ class database_flaskr:
 			
 	def adoptProblem(self,username,problem_id):
 		pingAndReconnect(self)
+		if str(username) == su: #Superuser
+			self.c.execute("INSERT INTO ms_su_problems (problem_id) VALUES (%s);",(problem_id,))
+			self.conn.commit()
+			response="Adopted"
+			return response
+			
 		db_response=self.c.execute("SELECT * FROM app_users_per_problem2 WHERE problem_id = %s;",(problem_id,))
 		db_response=self.c.fetchall()
 		if(len(db_response)==0):
@@ -332,6 +355,12 @@ class database_flaskr:
 			
 	def unAdoptProblem(self,username,problem_id):
 		pingAndReconnect(self)
+		if str(username) == su: #Superuser
+			self.c.execute("DELETE from ms_su_problems WHERE (problem_id = %s);",(problem_id,))
+			self.conn.commit()
+			response= "UnAdopted"
+			return response
+		
 		db_response=self.c.execute("SELECT * FROM app_users_per_problem2 WHERE problem_id = %s;",(problem_id,))
 		db_response=self.c.fetchall()
 		if db_response[0][1]==username:
