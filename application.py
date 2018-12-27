@@ -46,6 +46,7 @@ def exotel():
 			op_info=requests.get("https://joloapi.com/api/findoperator.php?userid=devansh76&key=326208132556249&mob=%s&type=text" %(str(number)))
 			if op_info.text.split(",")[0] in op_code_map:
 				op_code=str(op_code_map[op_info.text.split(",")[0]])
+				print op_code
 				cir_code=str(op_info.text.split(",")[1])
 			elif op_info.text.split(",")[0] in fail_map:
 				print "non-rechargeable"
@@ -53,6 +54,13 @@ def exotel():
 			z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 			rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
 			print rech.text
+			if rech.text.split(',')[0]=='FAILED':
+				op_list=['TW','T24S','T24','VC','VGS','VG','VDS','VD','TI','TDS','TD','AL','MS','UNS','UN','RG','RL','VF','IDX','BSS','BS','AT']
+				z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+				for i in op_list:
+					rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (str(i),number,amount,z))
+					if rech.text.split(',')[0] != 'FAILED':
+						break
 		return '200 OK'
 #****************************************************************************
 
