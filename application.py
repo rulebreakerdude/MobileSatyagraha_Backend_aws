@@ -61,6 +61,7 @@ def exotel():
 					rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (str(i),number,amount,z))
 					if rech.text.split(',')[0] != 'FAILED':
 						break
+			mydb.insertExotelData(number,rech.text,z)
 		return '200 OK'
 #****************************************************************************
 

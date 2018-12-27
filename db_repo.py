@@ -78,6 +78,16 @@ class database_flaskr:
 		self.conn.commit()
 #****************************************************************************	
 
+
+
+#****************************************************************************
+#exotel definition for ICTD		
+	def insertExotelData(self,caller_id,recharge_status,datetime):
+		pingAndReconnect(self)
+		self.c.execute("INSERT INTO exotel_data (caller_id,recharge_status,datetime) VALUES (%s,%s,%s);",(caller_id,recharge_status,datetime) )
+		self.conn.commit()
+#****************************************************************************	
+
 		
 		
 #****************************************************************************		
