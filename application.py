@@ -52,6 +52,7 @@ def exotel():
 			amount=10
 			z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 			rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
+			print rech.text
 		return '200 OK'
 #****************************************************************************
 
