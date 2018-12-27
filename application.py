@@ -1,6 +1,7 @@
 import os
 import eventlet
 import datetime
+import requests
 
 from flask import Flask, render_template, request, current_app
 from flask_socketio import SocketIO, join_room, leave_room
@@ -14,6 +15,9 @@ application.config['SECRET_KEY'] = 'vnkdjnfjknfl1232#'
 socketio = SocketIO(application)
 mydb=database_flaskr()
 
+op_code_map={'1':'AL','3':'BS','28':'AT','8':'IDX','10':'MS','12':'RL','13':'RG','17':'TD','19':'UN','5':'VD','22':'VF'}
+fail_map={'29':'JO','20':'MTD','6':'MTM'}
+
 #****************************************************************************
 #test definitions
 @application.route('/hello', methods=['GET'])
@@ -26,7 +30,30 @@ def yellow():
 	if request.method == 'GET':
 		return mydb.yellowtest()
 #****************************************************************************
+
 		
+#****************************************************************************
+#exotel definition for ICTD
+@application.route('/exotel/', methods=['GET'])
+def exotel():
+	if request.method == 'GET':
+		que=request.query_string.split('&')
+		if que[-1]=='digits=%221%22':
+			number=que[1][-10:]
+			print number
+			
+			op_code="AT"#WARNING REMOVE THIS
+			op_info=requests.get("https://joloapi.com/api/findoperator.php?userid=devansh76&key=326208132556249&mob=%s&type=text" %(str(number)))
+			if op_info.text.split(",")[0] in op_code_map:
+				op_code=str(op_code_map[op_info.text.split(",")[0]])
+				cir_code=str(op_info.text.split(",")[1])
+			elif op_info.text.split(",")[0] in fail_map:
+				print "non-rechargeable"
+			amount=10
+			z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+			rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
+		return '200 OK'
+#****************************************************************************
 
 		
 #****************************************************************************		
