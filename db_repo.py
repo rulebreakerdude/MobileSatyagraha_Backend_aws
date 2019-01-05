@@ -74,7 +74,7 @@ class database_flaskr:
 		
 	def insertYatraData(self,sender_number,receiver_number,sender_name,receiver_name,datetime):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO yatra_data_2 (sender_number,receiver_number,sender_name,receiver_name,datetime) VALUES (%s,%s,%s,%s,%s);",(sender_number,receiver_number,sender_name.decode("utf-8"),receiver_name.decode("utf-8"),datetime) )
+		self.c.execute("INSERT INTO yatra_data_2 (sender_number,receiver_number,sender_name,receiver_name,datetime) VALUES (%s,%s,%s,%s,%s);",(sender_number,receiver_number,sender_name,receiver_name,datetime) )
 		self.conn.commit()
 #****************************************************************************	
 
