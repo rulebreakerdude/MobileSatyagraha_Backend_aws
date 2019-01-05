@@ -74,7 +74,7 @@ def yatradata():
 	if(mydb.yatraDataExists(f['sender_number'],f['receiver_number'])):
 		return "Done!"
 	else:
-		mydb.insertYatraData(f['sender_number'],f['receiver_number'],f['sender_name'].decode("utf-8"),f['receiver_name'].decode("utf-8"),f['datetime'])
+		mydb.insertYatraData(f['sender_number'],f['receiver_number'],f['sender_name'].encode("utf-8"),f['receiver_name'].encode("utf-8"),f['datetime'])
 		if(mydb.yatraDataExists(f['sender_number'],f['receiver_number'])):
 			return "Done!"
 		else:
