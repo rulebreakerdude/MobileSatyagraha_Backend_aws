@@ -71,10 +71,11 @@ def exotel():
 @application.route('/yatradata', methods=['POST'])
 def yatradata():
 	f = request.form
+	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 	if(mydb.yatraDataExists(f['sender_number'],f['receiver_number'])):
 		return "Done!"
 	else:
-		mydb.insertYatraData(f['sender_number'],f['receiver_number'],f['sender_name'].encode("utf-8"),f['receiver_name'].encode("utf-8"),f['datetime'])
+		mydb.insertYatraData(f['sender_number'],f['receiver_number'],f['sender_name'].encode("utf-8"),f['receiver_name'].encode("utf-8"),f['datetime'],str(z))
 		if(mydb.yatraDataExists(f['sender_number'],f['receiver_number'])):
 			return "Done!"
 		else:
