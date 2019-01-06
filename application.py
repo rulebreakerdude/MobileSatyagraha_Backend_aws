@@ -38,7 +38,7 @@ def yellow():
 def exotel():
 	if request.method == 'GET':
 		que=request.query_string.split('&')
-		if que[-1]=='digits=%221%22':
+		if que[-1]=='digits=%222%22':
 			number=que[1][-10:]
 			print number
 			
