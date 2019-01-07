@@ -84,7 +84,7 @@ class database_flaskr:
 		db_parse_2=[{"Total People Trained:":x[0]} for x in db_response_1]
 		db_response=self.c.execute("SELECT sender_number, max(sender_name), count(*) FROM flaskdb.yatra_data_2 group by sender_number order by (3) desc;")
 		db_response=self.c.fetchall()
-		db_parse=[{str(x[0]): "Name: "+x[1]+". Stories shared: "+str(x[2])} for x in db_response]
+		db_parse=[{str(x[0]): "Name: "+x[1]+". People Trained: "+str(x[2])} for x in db_response]
 		db_parse_2.append(db_parse)
 		return json.dumps(db_parse_2, indent=4)
 #****************************************************************************	
