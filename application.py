@@ -80,6 +80,12 @@ def yatradata():
 			return "Done!"
 		else:
 			return "Not Done!"
+			
+#yatra app definitions
+@application.route('/getYatraStat', methods=['GET'])
+def getYatraStat():
+	f = request.form
+	return current_app.response_class(mydb.getYatraStat(), mimetype="application/json")
 #****************************************************************************	
 	
 	
