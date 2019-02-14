@@ -40,6 +40,18 @@ class database_flaskr:
 		return str(db_response)
 #****************************************************************************		
 		
+
+
+
+#****************************************************************************		
+	#Learn2Earn Definitions
+	def insertLearn2EarnRecordNumberData(self,phoneNumber,datetime):
+		pingAndReconnect(self)
+		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_log (phoneNumber,datetime_of_call) VALUES (%s,%s);",(phoneNumber,datetime) )
+		self.conn.commit()
+#****************************************************************************	
+
+
 		
 		
 #****************************************************************************	

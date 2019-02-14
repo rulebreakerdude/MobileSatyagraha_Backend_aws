@@ -31,6 +31,20 @@ def yellow():
 		return mydb.yellowtest()
 #****************************************************************************
 
+
+
+#****************************************************************************
+#Learn2Earn Definitions
+@application.route('/learn2earnRecordNumber/<phoneNumber>', methods=['GET'])
+def learn2earnRecordNumber(phoneNumber):
+	if request.method == 'GET':
+		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+		mydb.insertLearn2EarnRecordNumberData(phoneNumber,z)
+	return '1'
+#****************************************************************************
+
+
+
 		
 #****************************************************************************
 #exotel definition for ICTD
