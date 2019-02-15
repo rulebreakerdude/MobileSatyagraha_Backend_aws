@@ -46,11 +46,12 @@ def learn2earnRecordNumber(phoneNumber):
 def learn2earnRechargeNumber(phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-		mydb.recharge_new(phoneNumber[1:])
+		recharge_new(phoneNumber[1:])
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
 	
 def recharge_new(number):
+	print number
 	op_code="AT"#WARNING REMOVE THIS
 	op_info=requests.get("https://joloapi.com/api/findoperator.php?userid=devansh76&key=326208132556249&mob=%s&type=text" %(str(number)))
 	if op_info.text.split(",")[0] in op_code_map:
@@ -70,8 +71,7 @@ def recharge_new(number):
 			rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (str(i),number,amount,z))
 			if rech.text.split(',')[0] != 'FAILED':
 				break
-	mydb.insertExotelData(number,rech.text,z)
-	return '200 OK'
+	mydb.insertLearn2EarnRechargeData(number,rech.text,z)
 
 #****************************************************************************
 

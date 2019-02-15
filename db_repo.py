@@ -49,6 +49,11 @@ class database_flaskr:
 		pingAndReconnect(self)
 		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_log (phoneNumber,datetime_of_call) VALUES (%s,%s);",(phoneNumber,datetime) )
 		self.conn.commit()
+		
+	def insertLearn2EarnRechargeData(self,phoneNumber,recharge_status,datetime):
+		pingAndReconnect(self)
+		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_actions (phoneNumber,recharge_status,datetime_of_recharge) VALUES (%s,%s,%s);",(phoneNumber,recharge_status,datetime) )
+		self.conn.commit()
 #****************************************************************************	
 
 
