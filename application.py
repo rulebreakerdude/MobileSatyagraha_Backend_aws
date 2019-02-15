@@ -40,7 +40,7 @@ def learn2earnRecordNumber(phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		mydb.insertLearn2EarnRecordNumberData(phoneNumber,z)
-	return Response('1', mimetype="text/dtmf")
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
 @application.route('/learn2earnRechargeNumber/<phoneNumber>', methods=['GET'])
 def learn2earnRechargeNumber(phoneNumber):
