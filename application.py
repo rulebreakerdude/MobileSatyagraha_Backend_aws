@@ -40,7 +40,7 @@ def learn2earnRecordNumber(phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		mydb.insertLearn2EarnRecordNumberData(phoneNumber,z)
-	return current_app.response_class('1', mimetype="application/x-www-form-urlencoded")
+	return current_app.response_class('1', mimetype="text/dtmf")
 #****************************************************************************
 
 
