@@ -3,7 +3,7 @@ import eventlet
 import datetime
 import requests
 
-from flask import Flask, render_template, request, current_app
+from flask import Flask, render_template, request, current_app, Response
 from flask_socketio import SocketIO, join_room, leave_room
 import hashlib
 from db_repo import *
@@ -40,7 +40,7 @@ def learn2earnRecordNumber(phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		mydb.insertLearn2EarnRecordNumberData(phoneNumber,z)
-	return current_app.response_class('1', mimetype="text/dtmf")
+	return Response('1', mimetype="text/dtmf")
 #****************************************************************************
 
 
