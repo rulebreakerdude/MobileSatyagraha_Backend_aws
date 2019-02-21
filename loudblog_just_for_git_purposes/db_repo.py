@@ -40,33 +40,6 @@ class database_flaskr:
 		return str(db_response)
 #****************************************************************************		
 		
-
-
-
-#****************************************************************************		
-	#Learn2Earn Definitions
-	def insertLearn2EarnRecordNumberData(self,phoneNumber,datetime):
-		pingAndReconnect(self)
-		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_log (phoneNumber,datetime_of_call) VALUES (%s,%s);",(phoneNumber,datetime) )
-		self.conn.commit()
-		
-	def insertLearn2EarnRechargeData(self,phoneNumber,recharge_status,datetime):
-		pingAndReconnect(self)
-		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_actions (phoneNumber,recharge_status,datetime_of_recharge) VALUES (%s,%s,%s);",(phoneNumber,recharge_status,datetime) )
-		self.conn.commit()
-#****************************************************************************	
-
-
-
-#****************************************************************************		
-	#CGSwara Definitions
-	def insertCGSwaraRecordNumberData(self,phoneNumber,datetime):
-		pingAndReconnect(self)
-		self.c.execute("INSERT INTO CGSwara_IMI_call_log (phoneNumber,datetime_of_call) VALUES (%s,%s);",(phoneNumber,datetime) )
-		self.conn.commit()
-		
-#****************************************************************************
-
 		
 		
 #****************************************************************************	

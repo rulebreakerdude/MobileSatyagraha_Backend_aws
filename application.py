@@ -77,6 +77,18 @@ def recharge_new(number):
 
 
 
+
+#****************************************************************************
+#CGSwara Definitions
+@application.route('/CGSwaraRecordNumber/<phoneNumber>', methods=['GET'])
+def CGSwaraRecordNumber(phoneNumber):
+	if request.method == 'GET':
+		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+		mydb.insertCGSwaraRecordNumberData(phoneNumber,z)
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+#****************************************************************************
+
+
 		
 #****************************************************************************
 #exotel definition for ICTD
