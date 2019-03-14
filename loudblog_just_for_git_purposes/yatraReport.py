@@ -7,8 +7,8 @@ from email.mime.text import MIMEText
 
 from db_repo import *
 
-MY_ADDRESS = 'rulebreakerdude@gmail.com'
-PASSWORD = '20H@5GH@RM33TU'
+MY_ADDRESS = 'cgnetmail2019@gmail.com'
+PASSWORD = 'QWERTYCGTECH123'
 mydb=database_flaskr()
 
 def main():

@@ -45,9 +45,9 @@ class database_flaskr:
 
 #****************************************************************************		
 	#Learn2Earn Definitions
-	def insertLearn2EarnRecordNumberData(self,phoneNumber,datetime):
+	def insertLearn2EarnRecordNumberData(self,tid,phoneNumber,datetime):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_log (phoneNumber,datetime_of_call) VALUES (%s,%s);",(phoneNumber,datetime) )
+		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_actions (tid,phoneNumber,datetime_of_call) VALUES (%s,%s,%s);",(tid,phoneNumber,datetime) )
 		self.conn.commit()
 		
 	def insertLearn2EarnRechargeData(self,phoneNumber,recharge_status,datetime):

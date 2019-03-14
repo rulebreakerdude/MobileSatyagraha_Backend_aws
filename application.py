@@ -35,11 +35,11 @@ def yellow():
 
 #****************************************************************************
 #Learn2Earn Definitions
-@application.route('/learn2earnRecordNumber/<phoneNumber>', methods=['GET'])
-def learn2earnRecordNumber(phoneNumber):
+@application.route('/learn2earnRecordNumber/<tid>/<phoneNumber>', methods=['GET'])
+def learn2earnRecordNumber(tid,phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-		mydb.insertLearn2EarnRecordNumberData(phoneNumber,z)
+		mydb.insertLearn2EarnRecordNumberData(tid,phoneNumber,z)
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
 @application.route('/learn2earnRechargeNumber/<phoneNumber>', methods=['GET'])
