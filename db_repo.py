@@ -56,6 +56,21 @@ class database_flaskr:
 		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET recharge_status = %s, datetime_of_recharge =%s WHERE tid = %s;",(recharge_status,datetime,tid) )
 		self.conn.commit()
 		
+	def insertHLRData(self,phoneNumber,op_code):
+		pingAndReconnect(self)
+		self.c.execute("INSERT INTO hlr_data (phoneNumber,op_code) VALUES (%s,%s);",(phoneNumber,op_code) )
+		self.conn.commit()
+
+	def getHLRData(self,phoneNumber):
+		pingAndReconnect(self)
+		db_response=self.c.execute("SELECT op_code FROM hlr_data WHERE phoneNumber = %s;",(phoneNumber,) )
+		db_response=self.c.fetchall()
+		print db_response
+		if len(db_response) > 0:
+			return [True,db_response[0][0]]
+		else:
+			return [False,""]
+		
 	def learn2earnRedirector(self,tid):
 		pingAndReconnect(self)
 		db_response=self.c.execute("SELECT response_q1, response_q2, response_q3 FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
@@ -80,6 +95,11 @@ class database_flaskr:
 		query="""UPDATE learn2earn_pilkha_ksheer_call_actions SET %s = %%s WHERE tid = %%s;"""
 		query = query % (column,)
 		self.c.execute(query,(response,tid))
+		self.conn.commit()
+		
+	def insertLearn2EarnOpCodeData(self,tid,op_code):
+		pingAndReconnect(self)
+		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET oth_data_1 = %s WHERE tid = %s;",(op_code,tid) )
 		self.conn.commit()
 		
 #****************************************************************************	

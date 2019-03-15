@@ -2,6 +2,7 @@ import os
 import eventlet
 import datetime
 import requests
+import json
 
 from flask import Flask, render_template, request, current_app, Response
 from flask_socketio import SocketIO, join_room, leave_room
@@ -42,13 +43,6 @@ def learn2earnRecordNumber(tid,phoneNumber):
 		mydb.insertLearn2EarnRecordNumberData(tid,phoneNumber,z)
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
-@application.route('/learn2earnRechargeNumber/<phoneNumber>', methods=['GET'])
-def learn2earnRechargeNumber(phoneNumber):
-	if request.method == 'GET':
-		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-		recharge_new(phoneNumber[1:])
-	return Response('1', mimetype="text/dtmf;charset=UTF-8")
-	
 @application.route('/learn2earnRedirector/<tid>', methods=['GET'])
 def learn2earnRedirector(tid):
 	if request.method == 'GET':
@@ -60,7 +54,48 @@ def l2eUpdateQuestionResponse(tid,question,response):
 	if request.method == 'GET':
 		mydb.l2eUpdateQuestionResponse(tid,question,response)
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+		
+@application.route('/learn2earnRechargeNumber/<tid>/<phoneNumber>', methods=['GET'])
+def learn2earnRechargeNumber(tid,phoneNumber):
+	if request.method == 'GET':
+		HLR(tid,phoneNumber[1:])
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
+def HLR(tid,number):
+	local_HLR=mydb.getHLRData(number)
+	if not local_HLR[0]:
+		dict_HLR_op_code={}
+		dict_HLR_op_code_new={}
+		with open('HLR.json') as f:
+			dict_HLR_op_code = json.load(f)
+		HLR_to_op={'aircel':'1','bsnl':'3','airtel':'28','vodafone':'22','docomo':'17','reliance':'13','idea':'8','uninor':'19','videocon':'5'}
+		op_code_map={'1':'AL','3':'BS','28':'AT','8':'IDX','10':'MS','12':'RL','13':'RG','17':'TD','19':'UN','5':'VD','22':'VF'}
+		for mccmnc in dict_HLR_op_code:
+			lookup_query=dict_HLR_op_code[mccmnc]
+			for op in HLR_to_op:
+				if op in lookup_query:
+					dict_HLR_op_code_new[mccmnc]=op_code_map[HLR_to_op[op]]
+		PWD="uTb5-CYC%-WTqm-MBaY-!aAT-ApSq"
+		hlr_response=requests.get("https://www.hlr-lookups.com/api/?action=submitSyncLookupRequest&msisdn=+91%s&username=devansh76-api-3874a453262b&password=%s" %(str(number),PWD))
+		h_r=json.loads(hlr_response.text)
+		mccmnc=h_r["results"][0]["mccmnc"]
+		if mccmnc in dict_HLR_op_code_new:
+			mydb.insertHLRData(number,dict_HLR_op_code_new[mccmnc])
+			mydb.insertLearn2EarnOpCodeData(tid,dict_HLR_op_code_new[mccmnc])
+			recharge_HLR(tid,number,dict_HLR_op_code_new[mccmnc])
+		else:
+			mydb.insertLearn2EarnOpCodeData(tid,mccmnc)
+	else:
+		op_code=local_HLR[1]
+		mydb.insertLearn2EarnOpCodeData(tid,op_code)
+		recharge_HLR(tid,number,op_code)
+		
+def recharge_HLR(tid,number,op_code):
+	amount=10
+	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+	rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
+	print rech.text
+	mydb.insertLearn2EarnRechargeData(tid,rech.text,z)
 	
 def recharge_new(number):
 	print number
