@@ -93,7 +93,11 @@ class database_flaskr:
 				shuffler.append(str(i))
 				
 		if len(shuffler)==0:
-			return '4'
+			q=db_response[0]
+			if q[0]=='1' and q[1]=='1' and q[2]=='1':
+				return '4'
+			else:
+				return '5'
 			
 		else:
 			random.shuffle(shuffler,random.random)
