@@ -61,7 +61,6 @@ class database_flaskr:
 		db_response=self.c.execute("SELECT response_q1, response_q2, response_q3 FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
 		db_response=self.c.fetchall()
 		shuffler=[]
-		print db_response[0]
 		i=0
 		for q in db_response[0]:
 			i=i+1
