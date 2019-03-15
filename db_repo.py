@@ -1,6 +1,7 @@
 import MySQLdb
 import json
 import datetime
+import random
 
 su="1234567891" #Superuser
 
@@ -50,10 +51,38 @@ class database_flaskr:
 		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_actions (tid,phoneNumber,datetime_of_call) VALUES (%s,%s,%s);",(tid,phoneNumber,datetime) )
 		self.conn.commit()
 		
-	def insertLearn2EarnRechargeData(self,phoneNumber,recharge_status,datetime):
+	def insertLearn2EarnRechargeData(self,tid,recharge_status,datetime):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_actions (phoneNumber,recharge_status,datetime_of_recharge) VALUES (%s,%s,%s);",(phoneNumber,recharge_status,datetime) )
+		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET recharge_status = %s, datetime_of_recharge =%s WHERE tid = %s;",(recharge_status,datetime,tid) )
 		self.conn.commit()
+		
+	def learn2earnRedirector(self,tid):
+		pingAndReconnect(self)
+		db_response=self.c.execute("SELECT response_q1, response_q2, response_q3 FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
+		db_response=self.c.fetchall()
+		shuffler=[]
+		print db_response[0]
+		i=0
+		for q in db_response[0]:
+			i=i+1
+			if q == None or not q or q.isspace() or q == '':
+				shuffler.append(str(i))
+				
+		if len(shuffler)==0:
+			return '4'
+			
+		else:
+			random.shuffle(shuffler,random.random)
+			return shuffler[0]
+			
+	def l2eUpdateQuestionResponse(self,tid,question,response):
+		pingAndReconnect(self)
+		column="response_"+question
+		query="""UPDATE learn2earn_pilkha_ksheer_call_actions SET %s = %%s WHERE tid = %%s;"""
+		query = query % (column,)
+		self.c.execute(query,(response,tid))
+		self.conn.commit()
+		
 #****************************************************************************	
 
 

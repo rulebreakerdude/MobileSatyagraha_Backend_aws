@@ -49,10 +49,22 @@ def learn2earnRechargeNumber(phoneNumber):
 		recharge_new(phoneNumber[1:])
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
+@application.route('/learn2earnRedirector/<tid>', methods=['GET'])
+def learn2earnRedirector(tid):
+	if request.method == 'GET':
+		direction = mydb.learn2earnRedirector(tid)
+	return Response(direction, mimetype="text/dtmf;charset=UTF-8")
+	
+@application.route('/l2eUpdateQuestionResponse/<tid>/<question>/<response>', methods=['GET'])
+def l2eUpdateQuestionResponse(tid,question,response):
+	if request.method == 'GET':
+		mydb.l2eUpdateQuestionResponse(tid,question,response)
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	
 	
 def recharge_new(number):
 	print number
-	op_code="AT"#WARNING REMOVE THIS
+	op_code="VF"#WARNING REMOVE THIS
 	op_info=requests.get("https://joloapi.com/api/findoperator.php?userid=devansh76&key=326208132556249&mob=%s&type=text" %(str(number)))
 	if op_info.text.split(",")[0] in op_code_map:
 		op_code=str(op_code_map[op_info.text.split(",")[0]])
@@ -65,7 +77,7 @@ def recharge_new(number):
 	rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
 	print rech.text
 	if rech.text.split(',')[0]=='FAILED':
-		op_list=['TW','T24S','T24','VC','VGS','VG','VDS','VD','TI','TDS','TD','AL','MS','UNS','UN','RG','RL','VF','IDX','BSS','BS','AT']
+		op_list=['VF','IDX','BSS','BS','AT','TW','T24S','T24','VC','VGS','VG','VDS','VD','TI','TDS','TD','AL','MS','UNS','UN','RG','RL']
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		for i in op_list:
 			rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (str(i),number,amount,z))
