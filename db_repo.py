@@ -70,6 +70,16 @@ class database_flaskr:
 			return [True,db_response[0][0]]
 		else:
 			return [False,""]
+			
+	def isRechargeEligible(self,tid):
+		pingAndReconnect(self)
+		db_response=self.c.execute("SELECT response_q1, response_q2, response_q3 FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
+		db_response=self.c.fetchall()
+		q=db_response[0]
+		if q[0]=='1' and q[1]=='1' and q[2]=='1':
+			return True
+		else:
+			return False
 		
 	def learn2earnRedirector(self,tid):
 		pingAndReconnect(self)

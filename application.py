@@ -58,7 +58,8 @@ def l2eUpdateQuestionResponse(tid,question,response):
 @application.route('/learn2earnRechargeNumber/<tid>/<phoneNumber>', methods=['GET'])
 def learn2earnRechargeNumber(tid,phoneNumber):
 	if request.method == 'GET':
-		HLR(tid,phoneNumber[1:])
+		if mydb.isRechargeEligible(tid):
+			HLR(tid,phoneNumber[1:])
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
 def HLR(tid,number):
