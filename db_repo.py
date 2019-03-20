@@ -99,7 +99,7 @@ class database_flaskr:
 		recharge_given="yes"
 		db_response_1=self.c.execute("SELECT * FROM learn2earn_pilkha_ksheer_call_actions WHERE phoneNumber = %s AND recharge_given = %s;",(number,recharge_given))
 		db_response_1=self.c.fetchall()
-		if len(db_response_1) > 0:
+		if len(db_response_1) > 0 and number != "08527837805" and number != "09717078576":
 			return '6'
 				
 		if len(shuffler)==0:
