@@ -51,9 +51,9 @@ class database_flaskr:
 		self.c.execute("INSERT INTO learn2earn_pilkha_ksheer_call_actions (tid,phoneNumber,datetime_of_call) VALUES (%s,%s,%s);",(tid,phoneNumber,datetime) )
 		self.conn.commit()
 		
-	def insertLearn2EarnRechargeData(self,tid,recharge_status,datetime):
+	def insertLearn2EarnRechargeData(self,tid,recharge_status,datetime,recharge_given):
 		pingAndReconnect(self)
-		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET recharge_status = %s, datetime_of_recharge =%s WHERE tid = %s;",(recharge_status,datetime,tid) )
+		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET recharge_status = %s, datetime_of_recharge = %s, recharge_given= %s WHERE tid = %s;",(recharge_status,datetime,recharge_given,tid) )
 		self.conn.commit()
 		
 	def insertHLRData(self,phoneNumber,op_code):
@@ -76,7 +76,7 @@ class database_flaskr:
 		db_response=self.c.execute("SELECT response_q1, response_q2, response_q3 FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
 		db_response=self.c.fetchall()
 		q=db_response[0]
-		if q[0]=='1' and q[1]=='1' and q[2]=='1':
+		if q[0]=='1' and q[1]=='1' and q[2]=='2':
 			return True
 		else:
 			return False
@@ -91,6 +91,16 @@ class database_flaskr:
 			i=i+1
 			if q == None or not q or q.isspace() or q == '':
 				shuffler.append(str(i))
+				
+		db_response_1=self.c.execute("SELECT phoneNumber FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
+		db_response_1=self.c.fetchall()
+		number=db_response_1[0][0]
+		print number
+		recharge_given="yes"
+		db_response_1=self.c.execute("SELECT * FROM learn2earn_pilkha_ksheer_call_actions WHERE phoneNumber = %s AND recharge_given = %s;",(number,recharge_given))
+		db_response_1=self.c.fetchall()
+		if len(db_response_1) > 0:
+			return '6'
 				
 		if len(shuffler)==0:
 			q=db_response[0]
