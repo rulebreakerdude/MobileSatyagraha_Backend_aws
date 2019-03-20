@@ -94,7 +94,7 @@ class database_flaskr:
 				
 		if len(shuffler)==0:
 			q=db_response[0]
-			if q[0]=='1' and q[1]=='1' and q[2]=='1':
+			if q[0]=='1' and q[1]=='1' and q[2]=='2':
 				return '4'
 			else:
 				return '5'
