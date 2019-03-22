@@ -41,7 +41,7 @@ def learn2earnRecordNumber(tid,phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		mydb.insertLearn2EarnRecordNumberData(tid,phoneNumber,z)
-	return Response('1', mimetype="text/dtmf; charset=UTF-8")
+	return Response('1', mimetype="text/dtmf")
 	
 @application.route('/learn2earnRedirector/<tid>', methods=['GET'])
 def learn2earnRedirector(tid):
