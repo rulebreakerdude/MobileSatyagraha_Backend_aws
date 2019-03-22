@@ -41,13 +41,13 @@ def learn2earnRecordNumber(tid,phoneNumber):
 	if request.method == 'GET':
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		mydb.insertLearn2EarnRecordNumberData(tid,phoneNumber,z)
-	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	return Response('1', mimetype="text/dtmf; charset=UTF-8")
 	
 @application.route('/learn2earnRedirector/<tid>', methods=['GET'])
 def learn2earnRedirector(tid):
 	if request.method == 'GET':
 		direction = mydb.learn2earnRedirector(tid)
-	return Response(direction, mimetype="text/dtmf;charset=UTF-8")
+	return Response(direction, mimetype="text/dtmf; charset=UTF-8")
 	
 @application.route('/callViaIMI/<number>', methods=['GET','POST'])
 def callViaIMI(number):
@@ -61,13 +61,13 @@ def callViaIMI(number):
 def l2eUpdateQuestionResponse(tid,question,response):
 	if request.method == 'GET':
 		mydb.l2eUpdateQuestionResponse(tid,question,response)
-	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	return Response('1', mimetype="text/dtmf; charset=UTF-8")
 		
 @application.route('/learn2earnRechargeNumber/<tid>/<phoneNumber>', methods=['GET'])
 def learn2earnRechargeNumber(tid,phoneNumber):
 	if request.method == 'GET':
 		HLR(tid,phoneNumber[1:])
-	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	return Response('1', mimetype="text/dtmf; charset=UTF-8")
 	
 def HLR(tid,number):
 	local_HLR=mydb.getHLRData(number)
