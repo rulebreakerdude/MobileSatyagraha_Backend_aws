@@ -17,5 +17,5 @@ for mccmnc in dict_HLR_op_code:
 print dict_HLR_op_code_new
 '''
 z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=8527837805&opt=ID&amt=10&agentid=%s&fmt=JSON" %(z))
-print json.loads(rech.text)['MSG'].split(',')[0]=='Failed'
+rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=9630095766&opt=B&amt=10&agentid=%s&fmt=JSON" %(z))
+print json.loads(rech.text)['MSG']

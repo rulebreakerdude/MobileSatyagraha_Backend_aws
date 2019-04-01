@@ -81,12 +81,25 @@ class database_flaskr:
 		pingAndReconnect(self)
 		db_response_1=self.c.execute("SELECT count(*) FROM yatra_data_2;")
 		db_response_1=self.c.fetchall()
-		db_parse_2=[{"Total People Trained:":x[0]} for x in db_response_1]
-		db_response=self.c.execute("SELECT sender_number, max(sender_name), count(*) FROM flaskdb.yatra_data_2 group by sender_number order by (3) desc;")
-		db_response=self.c.fetchall()
-		db_parse=[{str(x[0]): "Name: "+x[1]+". People Trained: "+str(x[2])} for x in db_response]
-		db_parse_2.append(db_parse)
-		return json.dumps(db_parse_2, indent=4)
+		db_parse_1=[{"Below is the Cumulative Report: Total People Trained:":x[0]} for x in db_response_1]
+		
+		db_response_2=self.c.execute("SELECT sender_number, max(sender_name), count(*) FROM flaskdb.yatra_data_2 group by sender_number order by (3) desc;")
+		db_response_2=self.c.fetchall()
+		db_parse_2=[{str(x[0]): "Name: "+x[1]+". People Trained: "+str(x[2])} for x in db_response_2]
+		
+		db_response_3=self.c.execute("SELECT distinct(substring(datetimeServer,1,8)) FROM flaskdb.yatra_data_2 order by (1) desc;")
+		db_response_3=self.c.fetchall()
+		last_date=db_response_3[1][0]
+		db_parse_3=[{"Daily report for the date":last_date}]
+		
+		db_response_4=self.c.execute("SELECT sender_number, max(sender_name), count(*) as the_count FROM flaskdb.yatra_data_2 where substring(datetimeServer,1,8)=%s group by sender_number order by the_count desc;",(last_date,))
+		db_response_4=self.c.fetchall()
+		db_parse_4=[{str(x[0]): "Name: "+x[1]+". People Trained: "+str(x[2])} for x in db_response_4]
+		
+		db_parse_3.append(db_parse_4[0])
+		db_parse_3.append(db_parse_1)
+		db_parse_3.append(db_parse_2)
+		return json.dumps(db_parse_3, indent=4)
 #****************************************************************************	
 
 

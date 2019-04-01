@@ -10,7 +10,7 @@ from db_repo import *
 MY_ADDRESS = 'cgnetmail2019@gmail.com'
 PASSWORD = 'QWERTYCGTECH123'
 mydb=database_flaskr()
-
+print mydb.getYatraStat()
 def main():
 
 	# set up the SMTP server
