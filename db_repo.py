@@ -65,7 +65,6 @@ class database_flaskr:
 		pingAndReconnect(self)
 		db_response=self.c.execute("SELECT op_code FROM hlr_data WHERE phoneNumber = %s;",(phoneNumber,) )
 		db_response=self.c.fetchall()
-		print db_response
 		if len(db_response) > 0:
 			return [True,db_response[0][0]]
 		else:
@@ -95,7 +94,6 @@ class database_flaskr:
 		db_response_1=self.c.execute("SELECT phoneNumber FROM learn2earn_pilkha_ksheer_call_actions WHERE tid = %s;",(tid,))
 		db_response_1=self.c.fetchall()
 		number=db_response_1[0][0]
-		print number
 		recharge_given="%yes%"
 		db_response_1=self.c.execute("SELECT * FROM learn2earn_pilkha_ksheer_call_actions WHERE phoneNumber = %s AND recharge_given LIKE %s;",(number,recharge_given))
 		db_response_1=self.c.fetchall()
