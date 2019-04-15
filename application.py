@@ -203,6 +203,14 @@ def yatradata():
 		else:
 			return "Not Done!"
 			
+@application.route('/yatraAnsweredData', methods=['POST'])
+def yatraAnsweredData():
+	f = request.form
+	if(mydb.yatraAnsweredDataExists(f['receiver_number'])):
+		return "Done!"
+	else:
+		return "Not Done!"
+			
 #yatra app definitions
 @application.route('/getYatraStat', methods=['GET'])
 def getYatraStat():

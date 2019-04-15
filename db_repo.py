@@ -169,6 +169,11 @@ class database_flaskr:
 		db_response=self.c.execute("SELECT * FROM yatra_data_2 WHERE sender_number = %s AND receiver_number = %s;",(sender_number,receiver_number) )
 		return db_response>0
 		
+	def yatraAnsweredDataExists(self,receiver_number):
+		pingAndReconnect(self)
+		db_response=self.c.execute("SELECT phoneNumber FROM learn2earn_pilkha_ksheer_call_actions WHERE phoneNumber = %s;",(receiver_number,) )
+		return db_response>0
+		
 	def insertYatraData(self,sender_number,receiver_number,sender_name,receiver_name,datetime,datetimeServer):
 		pingAndReconnect(self)
 		self.c.execute("INSERT INTO yatra_data_2 (sender_number,receiver_number,sender_name,receiver_name,datetime,datetimeServer) VALUES (%s,%s,%s,%s,%s,%s);",(sender_number,receiver_number,sender_name,receiver_name,datetime,datetimeServer) )
