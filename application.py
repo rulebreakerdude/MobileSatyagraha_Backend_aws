@@ -43,6 +43,13 @@ def learn2earnRecordNumber(tid,phoneNumber):
 		mydb.insertLearn2EarnRecordNumberData(tid,phoneNumber,z)
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
+@application.route('/learn2earnRecordNumberWithChannel/<tid>/<phoneNumber>/<channel>', methods=['GET'])
+def learn2earnRecordNumberWithChannel(tid,phoneNumber,channel):
+	if request.method == 'GET':
+		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+		mydb.insertLearn2EarnRecordNumberDataWithChannel(tid,phoneNumber,z,channel)
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	
 @application.route('/learn2earnRedirector/<tid>', methods=['GET'])
 def learn2earnRedirector(tid):
 	if request.method == 'GET':
@@ -104,15 +111,16 @@ def recharge_HLR(tid,number,op_code):
 	#trying via IMWallet
 	jolo_to_imwallet={'AT':'AR','BS':'B','IDX':'ID','RG':'RG','TD':'DG','UN':'UN','VF':'VF'}
 	op_code_imwallet=jolo_to_imwallet[op_code]
-	rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
-	if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':#Trying via Jolo
-		rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
-		if rech.text.split(',')[0] != 'FAILED':
-			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes Jolo")
-		else:
-			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
+	rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
+	if rech.text.split(',')[0] != 'FAILED':
+		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes Jolo")
 	else:
-		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes ImWallet")
+		rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
+		if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
+			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
+		else:
+			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes ImWallet")
+		
 	
 def recharge_new(number):
 	print number
