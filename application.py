@@ -38,11 +38,11 @@ def yellow():
 
 #****************************************************************************
 #DBA definitions
-@application.route('/killProcesses', methods=['GET'])
-def killProcesses():
+@application.route('/killProcessesF', methods=['GET'])
+def killProcessesF():
 	if request.method == 'GET':
-		mydb.killProcessList()
-		return "Done"
+		mydbnew=database_flaskr()
+		return mydbnew.killProcessList()
 #****************************************************************************
 
 
