@@ -19,6 +19,16 @@ def pingAndReconnect(self):
 		)
 		self.c=self.conn.cursor()
 		self.c.execute('USE flaskdb;')
+	except:
+		print "caught default error, reconnecting"
+		self.conn = MySQLdb.connect(
+			host="cgdbaws.cv23wjqihuhm.ap-south-1.rds.amazonaws.com",
+			port=3306,
+			user="root",
+			passwd="CGDBAWSsql"
+		)
+		self.c=self.conn.cursor()
+		self.c.execute('USE flaskdb;')
 	
 class database_flaskr:
 
