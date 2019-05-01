@@ -32,6 +32,26 @@ class database_flaskr:
 		self.c=self.conn.cursor()
 		self.c.execute('USE flaskdb;')
 		
+		
+		
+#****************************************************************************		
+	#DBA definitions
+	def killProcessList(self):
+		pingAndReconnect(self)
+		db_response=self.c.execute("SELECT ID FROM INFORMATION_SCHEMA.PROCESSLIST;")
+		db_response=self.c.fetchall()
+		for row in db_response:
+			process_id=row[0]
+			if(int(process_id) > 100):
+				query="CALL mysql.rds_kill("+str(process_id)+");"
+				try:
+					self.c.execute(query)
+				except:
+					continue
+#****************************************************************************
+
+
+		
 #****************************************************************************		
 	#test definitions	
 	def yellowtest(self):

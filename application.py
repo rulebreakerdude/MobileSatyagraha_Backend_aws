@@ -19,6 +19,8 @@ mydb=database_flaskr()
 op_code_map={'1':'AL','3':'BS','28':'AT','8':'IDX','10':'MS','12':'RL','13':'RG','17':'TD','19':'UN','5':'VD','22':'VF'}
 fail_map={'29':'JO','20':'MTD','6':'MTM'}
 
+
+
 #****************************************************************************
 #test definitions
 @application.route('/hello', methods=['GET'])
@@ -30,6 +32,16 @@ def hello():
 def yellow():
 	if request.method == 'GET':
 		return mydb.yellowtest()
+#****************************************************************************
+
+
+
+#****************************************************************************
+#DBA definitions
+@application.route('/killProcesses', methods=['GET'])
+def killProcesses():
+	if request.method == 'GET':
+		return mydb.killProcessList()
 #****************************************************************************
 
 
