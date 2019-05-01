@@ -48,7 +48,6 @@ class database_flaskr:
 					self.c.execute(query)
 				except:
 					continue
-		print "Done"
 #****************************************************************************
 
 

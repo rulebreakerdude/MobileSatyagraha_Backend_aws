@@ -41,7 +41,8 @@ def yellow():
 @application.route('/killProcesses', methods=['GET'])
 def killProcesses():
 	if request.method == 'GET':
-		return mydb.killProcessList()
+		mydb.killProcessList()
+		return "Done"
 #****************************************************************************
 
 
