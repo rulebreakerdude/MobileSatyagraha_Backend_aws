@@ -37,6 +37,7 @@ class database_flaskr:
 #****************************************************************************		
 	#DBA definitions
 	def killProcessList(self):
+		'''
 		db_response=self.c.execute("SELECT ID FROM INFORMATION_SCHEMA.PROCESSLIST;")
 		db_response=self.c.fetchall()
 		for row in db_response:
@@ -47,6 +48,7 @@ class database_flaskr:
 					self.c.execute(query)
 				except:
 					continue
+		'''
 		return 'Done'
 #****************************************************************************
 
