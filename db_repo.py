@@ -208,7 +208,7 @@ class database_flaskr:
 		
 	def yatraAnsweredDataExists(self,receiver_number):
 		pingAndReconnect(self)
-		db_response=self.c.execute("SELECT phoneNumber FROM learn2earn_pilkha_ksheer_call_actions WHERE phoneNumber = %s;",(receiver_number,) )
+		db_response=self.c.execute("SELECT phoneNumber FROM learn2earn_pilkha_ksheer_call_actions WHERE phoneNumber = %s and response_consent > %s;",(receiver_number,"") )
 		return db_response>0
 		
 	def insertYatraData(self,sender_number,receiver_number,sender_name,receiver_name,datetime,datetimeServer):
