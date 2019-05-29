@@ -1,6 +1,7 @@
 import MySQLdb
 import json
 import datetime
+import requests
 
 su="1234567891" #Superuser
 
@@ -100,6 +101,27 @@ class database_flaskr:
 		db_parse_3.append(db_parse_1)
 		db_parse_3.append(db_parse_2)
 		return json.dumps(db_parse_3, indent=4)
+#****************************************************************************	
+
+
+
+#****************************************************************************
+	#Learn2Earn definition
+	def tryLearn2EarnRechargeFailed(self):
+		pingAndReconnect(self)
+		word_3=""
+		word_1="%no%"
+		word_2="4%"
+		db_response = self.c.execute("Select tid, phoneNumber, recharge_given, oth_data_1 FROM learn2earn_pilkha_ksheer_call_actions WHERE response_consent > %s and (recharge_given LIKE %s OR oth_data_1 LIKE %s or oth_data_1 is null);",(word_3,word_1,word_2))
+		db_response = self.c.fetchall()
+		for row in db_response:
+			tid=row[0]
+			phoneNumber=row[1]
+			print "Trying number: "+phoneNumber+" of tid: "+tid
+			a=requests.get("http://flask-aws-dev.ap-south-1.elasticbeanstalk.com/learn2earnRechargeNumber/"+tid+"/"+phoneNumber)
+			print a.text
+			
+		
 #****************************************************************************	
 
 
