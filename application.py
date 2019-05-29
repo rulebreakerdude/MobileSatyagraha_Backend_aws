@@ -106,6 +106,7 @@ def HLR(tid,number):
 		PWD="uTb5-CYC%-WTqm-MBaY-!aAT-ApSq"
 		hlr_response=requests.get("https://www.hlr-lookups.com/api/?action=submitSyncLookupRequest&msisdn=+91%s&username=devansh76-api-3874a453262b&password=%s" %(str(number),PWD))
 		h_r=json.loads(hlr_response.text)
+		print h_r
 		mccmnc=h_r["results"][0]["mccmnc"]
 		if mccmnc in dict_HLR_op_code_new:
 			mydb.insertHLRData(number,dict_HLR_op_code_new[mccmnc])
