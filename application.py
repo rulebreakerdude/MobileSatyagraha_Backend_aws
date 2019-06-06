@@ -172,6 +172,14 @@ def CGSwaraRecordNumber(phoneNumber):
 		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 		mydb.insertCGSwaraRecordNumberData(phoneNumber,z)
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+
+@application.route('/callCGNetViaIMI/<number>', methods=['GET','POST'])
+def callCGNetViaIMI(number):
+	url="http://api-openhouse.imimobile.com/1/obd/thirdpartycall/callSessions"
+	rawdata = "address=%(a1)s&callflow_id=%(cfid)s&externalHeaders=x-imi-ivrs-v1:s0.wav;x-imi-ivrs-v2:s1.wav;x-imi-ivrs-v3:s2.wav;x-imi-ivrs-v4:s3.wav;x-imi-ivrs-v5:s4.wav;x-imi-ivrs-i1:i0.wav;x-imi-ivrs-i2:i1.wav;x-imi-ivrs-i3:i2.wav;x-imi-ivrs-i4:i3.wav;x-imi-ivrs-i5:i4.wav;" % dict(a1=number , cfid="6300")
+	headers = {"key": "01b8ab23-78cd-4317-bf41-95dd22fcece0","Content-type": "application/X-www-form-urlencoded", "Accept": "application/xml"}
+	r = requests.post(url,data=rawdata,headers=headers)
+	return r.text
 #****************************************************************************
 
 
