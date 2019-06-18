@@ -167,9 +167,9 @@ class database_flaskr:
 
 #****************************************************************************		
 	#CGSwara Definitions
-	def insertCGSwaraRecordNumberData(self,phoneNumber,datetime):
+	def insertCGSwaraRecordNumberData(self,phoneNumber,ref_id,datetime):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO CGSwara_IMI_call_log (phoneNumber,datetime_of_api_call) VALUES (%s,%s);",(phoneNumber,datetime) )
+		self.c.execute("INSERT INTO CGSwara_IMI_call_log (phoneNumber,ref_id,datetime_of_api_call) VALUES (%s,%s,%s);",(phoneNumber,ref_id,datetime) )
 		self.conn.commit()
 		
 #****************************************************************************
