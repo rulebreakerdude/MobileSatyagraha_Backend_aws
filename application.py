@@ -180,7 +180,7 @@ def callCGNetViaIMI(number):
 	headers = {"key": "01b8ab23-78cd-4317-bf41-95dd22fcece0","Content-type": "application/X-www-form-urlencoded", "Accept": "application/xml"}
 	r = requests.post(url,data=rawdata,headers=headers)
 	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-	mydb.insertCGSwaraRecordNumberData(number,r.text.split(',')[1],z)
+	mydb.insertCGSwaraRecordNumberData(number,r.text.split(',')[1],"0",z)
 	return r.text
 #****************************************************************************
 
