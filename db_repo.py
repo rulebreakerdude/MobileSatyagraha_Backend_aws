@@ -278,7 +278,7 @@ class database_flaskr:
 	def fetchAll(self):
 		pingAndReconnect(self)
 		db_response=self.c.execute(
-			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE status = 3 AND tags LIKE \'%PROBLEM%\' ORDER BY posted DESC LIMIT 3;")
+			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE status = 3 AND tags LIKE \'%PROBLEM%\' ORDER BY posted DESC LIMIT 3;")
 		db_response=self.c.fetchall()
 		db_parse=[{"problem_id": str(x[0]),
 					"problem_text": x[1].decode("utf-8"), 
@@ -310,7 +310,7 @@ class database_flaskr:
 		handpump="%HANDPUMP%"
 		nrega="%NREGA%"
 		db_response=self.c.execute(
-			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE tags not like %s and tags not like %s and tags not like %s and tags not like %s and (tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s) and id not in (select problem_id from app_users_per_problem2 where user1 != %s and user2 != %s) ORDER BY posted DESC LIMIT %s, %s;" 
+			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE tags not like %s and tags not like %s and tags not like %s and tags not like %s and (tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s) and id not in (select problem_id from app_users_per_problem2 where user1 != %s and user2 != %s) ORDER BY posted DESC LIMIT %s, %s;" 
 			,(song,news,culture,bultoo,problem,coal,mining,education,food,forest,land,electricity,water,handpump,nrega,blank,blank,s,e))
 		db_response=self.c.fetchall()
 		db_parse=[{"problem_id": str(x[0]),
@@ -343,7 +343,7 @@ class database_flaskr:
 		handpump="%HANDPUMP%"
 		nrega="%NREGA%"
 		db_response=self.c.execute(
-			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE (message_input like %s or tags like %s or title like %s) and tags not like %s and tags not like %s and tags not like %s and tags not like %s and (tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s) ORDER BY posted DESC LIMIT %s, %s;" 
+			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE (message_input like %s or tags like %s or title like %s) and tags not like %s and tags not like %s and tags not like %s and tags not like %s and (tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s or tags LIKE %s) ORDER BY posted DESC LIMIT %s, %s;" 
 			,(query,query,query,song,news,culture,bultoo,problem,coal,mining,education,food,forest,land,electricity,water,handpump,nrega,s,e))
 		db_response=self.c.fetchall()
 		db_parse=[{"problem_id": str(x[0]),
@@ -361,7 +361,7 @@ class database_flaskr:
 		pingAndReconnect(self)
 		if str(username) == su: #Superuser
 			db_response_2=self.c.execute(
-				"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE id in (SELECT problem_id FROM ms_su_problems);")
+				"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE id in (SELECT problem_id FROM ms_su_problems);")
 			db_response_2=self.c.fetchall()
 			db_parse=[{"problem_id": str(x[0]),
 						"problem_text": x[1].decode("utf-8"), 
@@ -379,7 +379,7 @@ class database_flaskr:
 		db_response_1=self.c.fetchall()
 		if(len(db_response_1)>0):
 			db_response=self.c.execute(
-				"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE id = %s OR id = %s;" ,(db_response_1[0][1],db_response_1[0][2]))
+				"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE id = %s OR id = %s;" ,(db_response_1[0][1],db_response_1[0][2]))
 			db_response=self.c.fetchall()
 			db_parse=[{"problem_id": str(x[0]),
 						"problem_text": x[1].decode("utf-8"), 
@@ -394,14 +394,14 @@ class database_flaskr:
 		
 	def fetchTest(self):
 		pingAndReconnect(self)
-		db_response=self.c.execute("SELECT message_input FROM app_problem_list WHERE status = 3 ORDER BY posted DESC LIMIT 3;")
+		db_response=self.c.execute("SELECT message_input FROM app_problem_list_backup_2 WHERE status = 3 ORDER BY posted DESC LIMIT 3;")
 		db_response=self.c.fetchall()
 		db_parse=[[x[0].decode("utf-8")] for x in db_response]
 		return db_parse
 		
 	def fetchOne(self, problem_id):
 		pingAndReconnect(self)
-		db_response=self.c.execute("SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list WHERE id = %s;",(problem_id,))
+		db_response=self.c.execute("SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE id = %s;",(problem_id,))
 		db_response=self.c.fetchall()
 		db_parse=[{"problem_id": str(x[0]),
 					"problem_text": x[1].decode("utf-8"), 
