@@ -288,7 +288,7 @@ class database_flaskr:
 					"comments": x[5],
 					"datetime": str(x[6].strftime("%d %B")),
 					"problem_desc": x[7].decode("utf-8"),
-					"duration": str(x[8])} for x in db_response]
+					"duration": x[8]} for x in db_response]
 		return json.dumps(db_parse)
 		
 	def fetchBlock(self,s,e):
@@ -321,7 +321,7 @@ class database_flaskr:
 					"comments": x[5],
 					"datetime": str(x[6].strftime("%d %B")),
 					"problem_desc": x[7].decode("utf-8"),
-					"duration": str(x[8])} for x in db_response]
+					"duration": x[8]} for x in db_response]
 		return json.dumps(db_parse)
 		
 	def fetchQueryBlock(self,query,s,e):
@@ -354,7 +354,7 @@ class database_flaskr:
 					"comments": x[5],
 					"datetime": str(x[6].strftime("%d %B")),
 					"problem_desc": x[7].decode("utf-8"),
-					"duration": str(x[8])} for x in db_response]
+					"duration": x[8]} for x in db_response]
 		return json.dumps(db_parse)
 		
 	def fetchProblemAgainstUser(self,username):
@@ -371,7 +371,7 @@ class database_flaskr:
 						"comments": x[5],
 						"datetime": str(x[6].strftime("%d %B")),
 						"problem_desc": x[7].decode("utf-8"),
-						"duration": str(x[8])} for x in db_response_2]
+						"duration": x[8]} for x in db_response_2]
 			return json.dumps(db_parse)
 			
 		db_response_1=self.c.execute(
@@ -389,7 +389,7 @@ class database_flaskr:
 						"comments": x[5],
 						"datetime": str(x[6].strftime("%d %B")),
 						"problem_desc": x[7].decode("utf-8"),
-						"duration": str(x[8])} for x in db_response]
+						"duration": x[8]} for x in db_response]
 			return json.dumps(db_parse)
 		
 	def fetchTest(self):
@@ -411,7 +411,7 @@ class database_flaskr:
 					"comments": x[5],
 					"datetime": str(x[6].strftime("%d %B")),
 					"problem_desc": x[7].decode("utf-8"),
-					"duration": str(x[8])} for x in db_response][0]
+					"duration": x[8]} for x in db_response][0]
 
 		return json.dumps(db_parse)
 		
