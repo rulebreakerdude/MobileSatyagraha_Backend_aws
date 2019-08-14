@@ -280,14 +280,32 @@ class database_flaskr:
 		db_response=self.c.execute(
 			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE status = 3 AND tags LIKE \'%PROBLEM%\' ORDER BY posted DESC LIMIT 3;")
 		db_response=self.c.fetchall()
-		db_parse=[{"problem_id": str(x[0]),
-					"problem_text": x[1].decode("utf-8"), 
+		db_parse=[{"problem_id": x[0],
+					"problem_text": x[1], 
 					"phone_number_r": x[2],
 					"phone_number_o": x[3],
-					"status": str(x[4]),
+					"status": x[4],
 					"comments": x[5],
 					"datetime": str(x[6].strftime("%d %B")),
-					"problem_desc": x[7].decode("utf-8"),
+					"problem_desc": x[7],
+					"duration": x[8]} for x in db_response]
+		return json.dumps(db_parse)
+		
+	def fetchBlockSwaraBultoo(self,keyword,s,e):
+		pingAndReconnect(self)
+		keyword="%"+keyword+"%"
+		db_response=self.c.execute(
+			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE title like %s ORDER BY posted DESC LIMIT %s, %s;" 
+			,(keyword,s,e))
+		db_response=self.c.fetchall()
+		db_parse=[{"problem_id": x[0],
+					"problem_text": x[1], 
+					"phone_number_r": x[2],
+					"phone_number_o": x[3],
+					"status": x[4],
+					"comments": x[5],
+					"datetime": x[6].strftime("%d %B"),
+					"problem_desc": x[7],
 					"duration": x[8]} for x in db_response]
 		return json.dumps(db_parse)
 		

@@ -265,6 +265,11 @@ def swaratoken():
 @application.route('/swarastat')
 def swarastat():
 	return current_app.response_class(mydb.getswarastat(), mimetype="application/json")
+	
+@application.route('/pblockswara/<keyword>/<int:s>/<int:e>')
+def fetchBlockSwaraBultoo(keyword,s,e):
+	e=e-s
+	return str(mydb.fetchBlockSwaraBultoo(keyword,s,e))
 #****************************************************************************
 
 
