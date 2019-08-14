@@ -295,13 +295,31 @@ class database_flaskr:
 		pingAndReconnect(self)
 		keyword="%"+keyword+"%"
 		db_response=self.c.execute(
-			"SELECT id, message_input, user, user, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE title like %s ORDER BY posted DESC LIMIT %s, %s;" 
+			"SELECT id, message_input, user, audio_file, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE title like %s and status = 3 ORDER BY posted DESC LIMIT %s, %s;" 
 			,(keyword,s,e))
 		db_response=self.c.fetchall()
 		db_parse=[{"problem_id": x[0],
 					"problem_text": x[1], 
 					"phone_number_r": x[2],
-					"phone_number_o": x[3],
+					"audio_file": x[3],
+					"status": x[4],
+					"comments": x[5],
+					"datetime": x[6].strftime("%d %B"),
+					"problem_desc": x[7],
+					"duration": x[8]} for x in db_response]
+		return json.dumps(db_parse)
+		
+	def fetchBlockSwaraBultoo2(self,number,s,e):
+		pingAndReconnect(self)
+		number="%"+number+"%"
+		db_response=self.c.execute(
+			"SELECT id, message_input, user, audio_file, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE user like %s and status = 3 ORDER BY posted DESC LIMIT %s, %s;" 
+			,(number,s,e))
+		db_response=self.c.fetchall()
+		db_parse=[{"problem_id": x[0],
+					"problem_text": x[1], 
+					"phone_number_r": x[2],
+					"audio_file": x[3],
 					"status": x[4],
 					"comments": x[5],
 					"datetime": x[6].strftime("%d %B"),

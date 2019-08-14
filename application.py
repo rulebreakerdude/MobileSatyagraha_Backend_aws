@@ -270,6 +270,11 @@ def swarastat():
 def fetchBlockSwaraBultoo(keyword,s,e):
 	e=e-s
 	return str(mydb.fetchBlockSwaraBultoo(keyword,s,e))
+
+@application.route('/pblockswara2/<number>/<int:s>/<int:e>')
+def fetchBlockSwaraBultoo2(number,s,e):
+	e=e-s
+	return str(mydb.fetchBlockSwaraBultoo2(number,s,e))
 #****************************************************************************
 
 
