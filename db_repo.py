@@ -264,6 +264,12 @@ class database_flaskr:
 		db_parse.extend(db_parse2)
 		db_parse.append(d)
 		return json.dumps(db_parse,indent=4)
+		
+	def insertSwaraRechargeData(self,phone_number,amount,status,datetime,wallet_amount_pre_try,wallet_amount_post_try,carrier_code):
+		pingAndReconnect(self)
+		self.c.execute("INSERT INTO swara_recharges (phone_number,amount,status,datetime,wallet_amount_pre_try,wallet_amount_post_try,carrier_code) VALUES (%s,%s,%s,%s,%s,%s,%s);",(phone_number,amount,status,datetime,wallet_amount_pre_try,wallet_amount_post_try,carrier_code))
+		self.conn.commit()
+		return str(wallet_amount_post_try)
 #****************************************************************************	
 
 

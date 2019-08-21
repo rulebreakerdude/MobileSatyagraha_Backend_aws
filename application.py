@@ -282,6 +282,22 @@ def fetchBlockSwaraBultoo(keyword,s,e):
 def fetchBlockSwaraBultoo2(number,s,e):
 	e=e-s
 	return str(mydb.fetchBlockSwaraBultoo2(number,s,e))
+	
+@application.route('/swaraRecharge', methods=['POST'])
+def swaraRecharge():
+	f = request.form
+	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+	return rechargeSwara(f['phone_number'],f['amount'],f['carrier_code'],f['wallet_amount'],str(z))
+
+def rechargeSwara(pn,a,cc,wa,z):	
+	rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" %(cc,str(pn),a,z))
+	print rech
+	print rech.text
+	if rech.text["status"] != 'FAILED':
+		newWalletAmount=str(int(wa)-int(a))
+		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc)
+	else:
+		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc)
 #****************************************************************************
 
 
