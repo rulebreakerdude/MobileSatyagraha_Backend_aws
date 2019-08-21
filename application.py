@@ -261,6 +261,13 @@ def swaratoken():
 	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 	mydb.insertSwaraToken(f['senderBTMAC'],f['receiverBTMAC'],f['filename'],f['appName'],f['phoneNumber'],f['carrierCode'],str(z))
 	return str({"reply":'User does not exist'})
+	
+@application.route('/newswaratoken', methods=['POST'])
+def newswaratoken():
+	f = request.form
+	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+	mydb.insertSwaraToken(f['senderBTMAC'],f['receiverBTMAC'],f['filename'],f['appName'],f['phoneNumber'],f['carrierCode'],str(z))
+	return str({"reply":'User does not exist'})
 
 @application.route('/swarastat')
 def swarastat():
