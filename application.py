@@ -290,12 +290,13 @@ def swaraRecharge():
 	return rechargeSwara(f['phone_number'],f['amount'],f['carrier_code'],f['wallet_amount'],str(z))
 
 def rechargeSwara(pn,a,cc,wa,z):	
-	rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" %(cc,str(pn),a,z))
-	if eval(rech.text)["status"] != 'FAILED':
+	rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(pn,cc,a,z))
+	print rech.text
+	if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
+		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc)
+	else:
 		newWalletAmount=str(int(wa)-int(a))
 		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc)
-	else:
-		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc)
 #****************************************************************************
 
 
