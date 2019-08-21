@@ -291,9 +291,7 @@ def swaraRecharge():
 
 def rechargeSwara(pn,a,cc,wa,z):	
 	rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" %(cc,str(pn),a,z))
-	print rech
-	print rech.text
-	if rech.text["status"] != 'FAILED':
+	if eval(rech.text)["status"] != 'FAILED':
 		newWalletAmount=str(int(wa)-int(a))
 		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc)
 	else:
