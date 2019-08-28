@@ -300,9 +300,13 @@ class database_flaskr:
 	def fetchBlockSwaraBultoo(self,keyword,s,e):
 		pingAndReconnect(self)
 		keyword="%"+keyword+"%"
+		z='{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now())
+		print z
+		y='{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()-datetime.timedelta(days=14))
+		print y
 		db_response=self.c.execute(
-			"SELECT id, message_input, user, audio_file, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE title like %s and status = 3 ORDER BY posted DESC LIMIT %s, %s;" 
-			,(keyword,s,e))
+			"SELECT id, message_input, user, audio_file, status, tags, posted, title, audio_length FROM app_problem_list_backup_2 WHERE title like %s and posted >= %s and status = 3 ORDER BY posted DESC;" 
+			,(keyword,y))
 		db_response=self.c.fetchall()
 		db_parse=[{"problem_id": x[0],
 					"problem_text": x[1], 
