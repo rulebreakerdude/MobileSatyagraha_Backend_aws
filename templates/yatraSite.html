@@ -16,7 +16,7 @@
 			{% for result in parent_dict %}
 			   {% for key, value in result.iteritems() %}
 					<tr>
-						<th><a href="http://localhost:5000/yatraSitePersonnel/{{key}}"> {{ key }} </a></th>
+						<th><a href="http://flask-aws-dev.ap-south-1.elasticbeanstalk.com/yatraSitePersonnel/{{key}}"> {{ key }} </a></th>
 						<td> {{ value[0] }} </td>
 						<td> {{ value[1] }} </td>
 						<td> {{ value[2] }} </td>
