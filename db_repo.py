@@ -230,16 +230,16 @@ class database_flaskr:
 		
 	def getYatraSiteData(self):
 		pingAndReconnect(self)
-		db_response_1=self.c.execute("SELECT * FROM flaskdb.temp8;")
+		db_response_1=self.c.execute("SELECT * FROM flaskdb.temp10;")
 		db_response_1=self.c.fetchall()
-		db_parse=[{str(x[0]):[str(x[1]),str(x[2]),str(x[3])]} for x in db_response_1]
+		db_parse=[{str(x[1]):[str(x[0]).decode("utf-8"),str(x[2]),str(x[3]),str(x[4])]} for x in db_response_1]
 		return db_parse
 		
 	def getYatraSitePersonnelData(self, number):
 		pingAndReconnect(self)
-		db_response_1=self.c.execute("SELECT * FROM flaskdb.temp7 WHERE sender_number = %s order by user DESC,phone_number DESC,receiver_number DESC;",(number,))
+		db_response_1=self.c.execute("SELECT receiver_number,user,phone_number FROM flaskdb.temp7 WHERE sender_number = %s order by user DESC,phone_number DESC,receiver_number DESC;",(number,))
 		db_response_1=self.c.fetchall()
-		db_parse=[{str(x[1]):[str(" "+x[0]),str(x[3]),str(x[4])]} for x in db_response_1]
+		db_parse=[{str(x[0]):[str(x[1]),str(x[2])]} for x in db_response_1]
 		return db_parse
 #****************************************************************************	
 
