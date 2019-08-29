@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+    <html lang="en">
+		<head>
+			<title>Yatra Data</title>
+		</head>
+		<body>
+
+			<h3 style='color: #000000;font-size: 30px;'>Yatra Data - Click on Numbers to get more info.</h3>
+			<table border = 1>
+			<tr>
+				<th><b>Number</b></th>
+				<th><b>People Trained</b></th>
+				<td><b>Points CGNet</b></td>
+				<td><b>Points Swara</b></td>
+			</tr>
+			{% for result in parent_dict %}
+			   {% for key, value in result.iteritems() %}
+					<tr>
+						<th><a href="http://localhost:5000/yatraSitePersonnel/{{key}}"> {{ key }} </a></th>
+						<td> {{ value[0] }} </td>
+						<td> {{ value[1] }} </td>
+						<td> {{ value[2] }} </td>
+					</tr>
+			   {% endfor %}
+			{% endfor %}
+		    </table>
+		</body>
+	</html>

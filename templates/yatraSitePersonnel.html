@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+    <html lang="en">
+		<head>
+			<title>Yatra Personnel Data</title>
+		</head>
+		<body>
+
+			<h3 style='color: #000000;font-size: 30px;'>Yatra Personnel Data.</h3>
+			<h4> Queried Number: {{parent_dict[0]}} </h4>
+			<table border = 1>
+			<tr>
+				<th><b>Training Recipient</b></th>
+				<td><b>Published in CGNet</b></td>
+				<td><b>Encashed From Swara</b></td>
+			</tr>
+			{% for result in parent_dict[1] %}		
+			   {% for key, value in result.iteritems() %}
+					<tr>
+						<td> {{ value[0] }} </td>
+						<td> {{ value[1] }} </td>
+						<td> {{ value[2] }} </td>
+					</tr>
+			   {% endfor %}
+			{% endfor %}
+		    </table>
+		</body>
+	</html>

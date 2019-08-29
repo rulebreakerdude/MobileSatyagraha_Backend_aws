@@ -262,6 +262,14 @@ def swaratoken():
 	mydb.insertSwaraToken(f['senderBTMAC'],f['receiverBTMAC'],f['filename'],f['appName'],f['phoneNumber'],f['carrierCode'],str(z))
 	return str({"reply":'User does not exist'})
 	
+@application.route('/yatraSite')
+def yatraSite():
+	return render_template('yatraSite.html',parent_dict=mydb.getYatraSiteData())
+	
+@application.route('/yatraSitePersonnel/<number>')
+def yatraSitePersonnel(number):
+	return render_template('yatraSitePersonnel.html',parent_dict=[str(number),mydb.getYatraSitePersonnelData(number)])
+	
 @application.route('/newswaratoken', methods=['POST'])
 def newswaratoken():
 	f = request.form
