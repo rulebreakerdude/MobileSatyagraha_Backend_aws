@@ -125,8 +125,8 @@ def recharge_HLR(tid,number,op_code):
 	#trying via IMWallet
 	jolo_to_imwallet={'AT':'AR','BS':'B','IDX':'ID','RG':'RG','TD':'DG','UN':'UN','VF':'VF'}
 	op_code_imwallet=jolo_to_imwallet[op_code]
-	rech=requests.get("https://joloapi.com/api/recharge.php?mode=1&userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s&type=text" % (op_code,str(number),amount,z))
-	if rech.text.split(',')[0] != 'FAILED':
+	rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" % (op_code,str(number),amount,z))
+	if eval(rech.text)["status"] != 'FAILED':
 		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes Jolo")
 	else:
 		rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
