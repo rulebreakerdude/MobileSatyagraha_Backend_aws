@@ -82,6 +82,13 @@ def l2eUpdateQuestionResponse(tid,question,response):
 	if request.method == 'GET':
 		mydb.l2eUpdateQuestionResponse(tid,question,response)
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	
+@application.route('/l2eReferralData/<tid>/<dnis>/<referred_number>', methods=['GET'])
+def l2eReferralData(tid,dnis,referred_number):
+	if request.method == 'GET':
+		z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+		mydb.insertL2eReferralData(tid,dnis,referred_number,z)
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 		
 @application.route('/learn2earnRechargeNumber/<tid>/<phoneNumber>', methods=['GET'])
 def learn2earnRechargeNumber(tid,phoneNumber):

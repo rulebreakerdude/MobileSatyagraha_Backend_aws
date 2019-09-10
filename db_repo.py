@@ -161,6 +161,11 @@ class database_flaskr:
 		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET oth_data_1 = %s WHERE tid = %s;",(op_code,tid) )
 		self.conn.commit()
 		
+	def insertL2eReferralData(self,tid,dnis,referred_number,datetime):
+		pingAndReconnect(self)
+		self.c.execute("INSERT INTO l2e_referral_data (tid,phone_number,referred_by,datetime) VALUES (%s,%s,%s,%s);",(tid,referred_number,dnis,datetime))
+		self.conn.commit()
+		
 #****************************************************************************	
 
 
