@@ -103,8 +103,8 @@ def HLR(tid,number):
 		dict_HLR_op_code_new={}
 		with open('HLR.json') as f:
 			dict_HLR_op_code = json.load(f)
-		HLR_to_op={'aircel':'1','bsnl':'3','cellone':'3','airtel':'28','vodafone':'22','docomo':'17','reliance':'13','idea':'8','uninor':'19','videocon':'5'}
-		op_code_map={'1':'AL','3':'BS','28':'AT','8':'IDX','10':'MS','12':'RL','13':'RG','17':'TD','19':'UN','5':'VD','22':'VF'}
+		HLR_to_op={'aircel':'1','bsnl':'3','cellone':'3','airtel':'28','vodafone':'22','docomo':'17','reliance':'13','idea':'8','uninor':'19','videocon':'5','jio':'jio'}
+		op_code_map={'1':'AL','3':'BS','28':'AT','8':'IDX','10':'MS','12':'RL','13':'RG','17':'TD','19':'UN','5':'VD','22':'VF','jio':'JO'}
 		for mccmnc in dict_HLR_op_code:
 			lookup_query=dict_HLR_op_code[mccmnc]
 			for op in HLR_to_op:
@@ -128,19 +128,22 @@ def HLR(tid,number):
 		
 def recharge_HLR(tid,number,op_code):
 	amount=10
+	if op_code == 'JO':
+		amount=11
 	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
 	#trying via IMWallet
-	jolo_to_imwallet={'AT':'AR','BS':'B','IDX':'ID','RG':'RG','TD':'DG','UN':'UN','VF':'VF'}
+	jolo_to_imwallet={'AT':'AR','BS':'B','IDX':'ID','RG':'RG','TD':'DG','UN':'UN','VF':'VF','JO':'JO'}
 	op_code_imwallet=jolo_to_imwallet[op_code]
 	rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" % (op_code,str(number),amount,z))
 	if eval(rech.text)["status"] != 'FAILED':
 		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes Jolo")
 	else:
-		rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
-		if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
-			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
-		else:
-			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes ImWallet")
+		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
+		#rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
+		#if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
+		#	mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
+		#else:
+		#	mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes ImWallet")
 		
 	
 def recharge_new(number):
