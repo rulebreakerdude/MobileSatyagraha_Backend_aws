@@ -138,12 +138,12 @@ def recharge_HLR(tid,number,op_code):
 	if eval(rech.text)["status"] != 'FAILED':
 		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes Jolo")
 	else:
-		mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
-		#rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
-		#if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
-		#	mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
-		#else:
-		#	mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes ImWallet")
+		#mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
+		rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
+		if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
+			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"no")
+		else:
+			mydb.insertLearn2EarnRechargeData(tid,rech.text,z,"yes ImWallet")
 		
 	
 def recharge_new(number):
