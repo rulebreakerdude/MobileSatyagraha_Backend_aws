@@ -161,13 +161,13 @@ class database_flaskr:
 		self.c.execute("UPDATE learn2earn_pilkha_ksheer_call_actions SET oth_data_1 = %s WHERE tid = %s;",(op_code,tid) )
 		self.conn.commit()
 		
-	def insertL2eReferralData(self,tid,dnis,referred_number,datetime):
+	def insertL2eReferralData(self,tid,dnis,referred_number,datetime,channel):
 		pingAndReconnect(self)
 		db_response=self.c.execute("SELECT * FROM l2e_referral_data WHERE phone_number = %s;",(referred_number,) )
 		if db_response>0:
 			return True
 		else:
-			self.c.execute("INSERT INTO l2e_referral_data (tid,phone_number,referred_by,datetime) VALUES (%s,%s,%s,%s);",(tid,referred_number,dnis,datetime))
+			self.c.execute("INSERT INTO l2e_referral_data (tid,phone_number,referred_by,datetime,oth_data_1) VALUES (%s,%s,%s,%s,%s);",(tid,referred_number,dnis,datetime,channel))
 			self.conn.commit()
 		
 #****************************************************************************	
