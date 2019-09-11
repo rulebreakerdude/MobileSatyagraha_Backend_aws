@@ -163,8 +163,12 @@ class database_flaskr:
 		
 	def insertL2eReferralData(self,tid,dnis,referred_number,datetime):
 		pingAndReconnect(self)
-		self.c.execute("INSERT INTO l2e_referral_data (tid,phone_number,referred_by,datetime) VALUES (%s,%s,%s,%s);",(tid,referred_number,dnis,datetime))
-		self.conn.commit()
+		db_response=self.c.execute("SELECT * FROM l2e_referral_data WHERE phone_number = %s;",(referred_number,) )
+		if db_response>0:
+			return True
+		else:
+			self.c.execute("INSERT INTO l2e_referral_data (tid,phone_number,referred_by,datetime) VALUES (%s,%s,%s,%s);",(tid,referred_number,dnis,datetime))
+			self.conn.commit()
 		
 #****************************************************************************	
 
