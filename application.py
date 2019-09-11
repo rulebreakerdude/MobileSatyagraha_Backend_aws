@@ -96,6 +96,33 @@ def learn2earnRechargeNumber(tid,phoneNumber):
 		HLR(tid,phoneNumber[1:])
 	return Response('1', mimetype="text/dtmf;charset=UTF-8")
 	
+@application.route('/l2eReferralRecharge/<id>/<phoneNumber>', methods=['GET'])
+def l2eReferralRecharge(id,phoneNumber):
+	if request.method == 'GET':
+		referralRecharge(id,phoneNumber[1:])
+	return Response('1', mimetype="text/dtmf;charset=UTF-8")
+	
+def referralRecharge(id,number):
+	local_HLR=mydb.getHLRData(number)
+	op_code=local_HLR[1]
+	amount=10
+	if op_code == 'JO':
+		amount=11
+	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
+	#trying via IMWallet
+	jolo_to_imwallet={'AT':'AR','BS':'B','IDX':'ID','RG':'RG','TD':'DG','UN':'UN','VF':'VF','JO':'JO'}
+	op_code_imwallet=jolo_to_imwallet[op_code]
+	rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" % (op_code,str(number),amount,z))
+	if eval(rech.text)["status"] != 'FAILED':
+		mydb.insertLearn2EarnReferralRechargeData(id,rech.text,"yes Jolo")
+	else:
+		#mydb.insertLearn2EarnReferralRechargeData(id,rech.text,z,"no")
+		rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(number,op_code_imwallet,amount,z))
+		if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
+			mydb.insertLearn2EarnReferralRechargeData(id,rech.text,"no")
+		else:
+			mydb.insertLearn2EarnReferralRechargeData(id,rech.text,"yes ImWallet")
+	
 def HLR(tid,number):
 	local_HLR=mydb.getHLRData(number)
 	if not local_HLR[0]:
