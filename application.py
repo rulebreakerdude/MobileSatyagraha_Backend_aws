@@ -332,16 +332,16 @@ def fetchBlockSwaraBultoo2(number,s,e):
 def swaraRecharge():
 	f = request.form
 	z='{:%Y%m%d%H%M%S}'.format(datetime.datetime.now())
-	return rechargeSwara(f['phone_number'],f['amount'],f['carrier_code'],f['wallet_amount'],str(z))
+	return rechargeSwara(f['phone_number'],f['amount'],f['carrier_code'],f['wallet_amount'],f['id'],str(z))
 
-def rechargeSwara(pn,a,cc,wa,z):	
+def rechargeSwara(pn,a,cc,wa,id,z):	
 	rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(pn,cc,a,z))
 	print rech.text
 	if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
-		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc)
+		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc,id)
 	else:
 		newWalletAmount=str(int(wa)-int(a))
-		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc)
+		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc,id)
 #****************************************************************************
 
 
