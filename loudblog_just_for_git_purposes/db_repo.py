@@ -101,6 +101,70 @@ class database_flaskr:
 		db_parse_3.append(db_parse_1)
 		db_parse_3.append(db_parse_2)
 		return json.dumps(db_parse_3, indent=4)
+		
+	def getYatraSwaraData(self):
+		pingAndReconnect(self)
+		db_parse={}
+		word="Apk"
+		db_response_1=self.c.execute("SELECT count(distinct(concat(senderBTMAC, receiverBTMAC, filename))) as count1 FROM flaskdb.bultoo_transfer where filename != %s;",(word,))
+		db_response_1=self.c.fetchall()
+		db_parse["Total Bultoo Transfers"]=db_response_1[0][0]
+		db_response_1=self.c.execute("SELECT count(distinct(concat(senderBTMAC, receiverBTMAC, filename))) as count1 FROM flaskdb.bultoo_transfer where filename = %s;",(word,))
+		db_response_1=self.c.fetchall()
+		db_parse["Total Apk Transfers"]=db_response_1[0][0]
+		db_response_1=self.c.execute("SELECT sum(wallet_amount_pre_try) as earned_money, sum(wallet_amount_post_try) as leftover_money FROM flaskdb.swara_recharges;")
+		db_response_1=self.c.fetchall()
+		db_parse["Total Amount Spent"]=int(db_response_1[0][0])-int(db_response_1[0][1])
+		return json.dumps(db_parse, indent=4)
+		
+	def yatraWPA(self):
+		pingAndReconnect(self)
+		self.c.execute("drop table temp1;")
+		self.conn.commit()
+		self.c.execute("create table temp1 as select receiver_number, sender_number, min(datetimeServer) as datetimeServer, receiver_name from flaskdb.yatra_data_2 group by 1,2 order by 1,2,3 desc;")
+		self.conn.commit()
+		word=""
+		self.c.execute("delete from flaskdb.temp1 where receiver_number = 7985622386 or receiver_number = 6264241440 or receiver_number = 8527837805 or receiver_number = 9717078576 or receiver_number = 3213213211 or sender_number=%s or sender_number=9717078576 or sender_number=6264241440;",(word,))
+		self.conn.commit()
+		self.c.execute("drop table temp2;")
+		self.conn.commit()
+		self.c.execute("create table temp2 as select distinct(user) from flaskdb.app_problem_list_backup_2 where status=3 and user in (select receiver_number from temp1);")
+		self.conn.commit()
+		self.c.execute("drop table temp3;")
+		self.conn.commit()
+		word="%success%"
+		self.c.execute("create table temp3 as select distinct(rf1) as phone_number from flaskdb.swara_recharges where status like %s and rf1 in (select receiver_number from temp1);",(word,))
+		self.conn.commit()
+		self.c.execute("drop table temp4;")
+		self.conn.commit()
+		self.c.execute("create table temp4 as select * from temp1 left join temp2 on temp1.receiver_number=temp2.user left join temp3 on temp1.receiver_number = temp3.phone_number;")
+		self.conn.commit()
+		self.c.execute("drop table temp5;")
+		self.conn.commit()
+		self.c.execute("create table temp5 as SELECT * FROM flaskdb.temp4 where datetimeServer is NOT NULL;")
+		self.conn.commit()
+		self.c.execute("drop table temp6;")
+		self.conn.commit()
+		self.c.execute("create table temp6 as SELECT receiver_number, min(datetimeServer) as ds FROM flaskdb.temp5 group by receiver_number order by (1) desc;")
+		self.conn.commit()
+		self.c.execute("drop table temp7;")
+		self.conn.commit()
+		self.c.execute("create table temp7 as select temp5.* from temp6 left join temp5 on temp6.receiver_number = temp5.receiver_number and temp6.ds = temp5.datetimeServer;")
+		self.conn.commit()
+		self.c.execute("drop table temp8;")
+		self.conn.commit()
+		self.c.execute("create table temp8 as SELECT sender_number, count(*) as trained, sum(user>0) as point_cgnet, sum(phone_number>0) as point_swara FROM flaskdb.temp7 group by (1);")
+		self.conn.commit()
+		self.c.execute("drop table temp9;")
+		self.conn.commit()
+		self.c.execute("create table temp9 as select max(sender_name) as sender_name,sender_number from yatra_data_2 group by (2);")
+		self.conn.commit()
+		self.c.execute("drop table temp10;")
+		self.conn.commit()
+		self.c.execute("create table temp10 as select temp9.sender_name,temp8.* from temp8 left join temp9 on temp8.sender_number=temp9.sender_number  order by point_cgnet desc,point_swara desc, trained  desc;")
+		self.conn.commit()
+		self.c.execute("start transaction;")
+		self.conn.commit()		
 #****************************************************************************	
 
 
@@ -121,7 +185,24 @@ class database_flaskr:
 			a=requests.get("http://flask-aws-dev.ap-south-1.elasticbeanstalk.com/learn2earnRechargeNumber/"+tid+"/"+phoneNumber)
 			print a.text
 			
+	def smsReferredUsers(self):
+		pingAndReconnect(self)
+		#self.c.execute("DELETE FROM l2e_referral_data where phone_number=substring(referred_by,2,10) OR LENGTH(phone_number)<10;")
+		#self.conn.commit()
+		db_response = self.c.execute("Select phone_number,referred_by,id,oth_data_1 FROM l2e_referral_data WHERE sms_sent is NULL;")
+		db_response=self.c.fetchall()
+		return db_response
 		
+	def updateStatusSms(self,id):
+		word="yes"
+		self.c.execute("UPDATE l2e_referral_data SET sms_sent = %s WHERE (id = %s);",(word,id))
+		self.conn.commit()
+		
+	def getEligibleReferrals(self):
+		word="%yes%"
+		db_response=self.c.execute("select id,referred_by FROM flaskdb.l2e_referral_data where (recharge_given is NULL or recharge_given not like %s) and concat(0,phone_number) in (select phoneNumber from flaskdb.learn2earn_pilkha_ksheer_call_actions where recharge_given like %s);",(word,word))
+		db_response=self.c.fetchall()
+		return db_response
 #****************************************************************************	
 
 

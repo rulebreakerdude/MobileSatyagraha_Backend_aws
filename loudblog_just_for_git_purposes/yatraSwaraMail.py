@@ -10,23 +10,22 @@ from db_repo import *
 MY_ADDRESS = 'cgnetmail2019@gmail.com'
 PASSWORD = 'QWERTYCGTECH123'
 mydb=database_flaskr()
-print mydb.getYatraStat()
+print mydb.getYatraSwaraData()
 def main():
-
 	# set up the SMTP server
 	s = smtplib.SMTP_SSL(host='smtp.gmail.com', port=465)
 	#s.starttls()
 	s.ehlo()
 	s.set_debuglevel(1)
 	s.login(MY_ADDRESS, PASSWORD)
-	emails=['sharma.alok.jr@gmail.com']
+	emails=['sharma.alok.jr@gmail.com','smitashu@gmail.com','devansh76@gmail.com','vipin@cgnet.in']
 
 	# For each contact, send the email:
 	for email in emails:
 		msg = MIMEMultipart()		# create a message
 
 		# add in the actual person name to the message template
-		message = "PFB the yatra report for today\n\n" + mydb.getYatraStat()
+		message = "PFB the Cumulative report for Yatra-Swara data\n\n" + mydb.getYatraSwaraData()
 
 		# Prints out the message body for our sake
 		print(message)
