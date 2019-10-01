@@ -338,10 +338,18 @@ def rechargeSwara(pn,a,cc,wa,id,z):
 	rech=requests.post("http://www.login.imwallet.in/API/APIService.aspx?userid=6264241440&pass=819954&mob=%s&opt=%s&amt=%s&agentid=%s&fmt=JSON" %(pn,cc,a,z))
 	print rech.text
 	if json.loads(rech.text)['MSG'].split(',')[0]=='Failed':
-		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc,id)
+		imwallet_to_jolo={'AR':'AT','B':'BS','ID':'IDX','RG':'RG','DG':'TD','UN':'UN','VF':'VF','JO':'JO'}
+		op_code=imwallet_to_jolo[cc]
+		rech=requests.get("https://joloapi.com/api/v1/recharge.php?userid=devansh76&key=326208132556249&operator=%s&service=%s&amount=%s&orderid=%s" % (op_code,pn,a,z))
+		if eval(rech.text)["status"] != 'FAILED':
+			newWalletAmount=str(int(wa)-int(a))
+			return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc,id)
+		else:
+			return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,wa,cc,id)
 	else:
 		newWalletAmount=str(int(wa)-int(a))
 		return mydb.insertSwaraRechargeData(pn,a,rech.text,z,wa,newWalletAmount,cc,id)
+		
 #****************************************************************************
 
 
